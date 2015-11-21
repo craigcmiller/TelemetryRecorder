@@ -38,7 +38,9 @@ public class CSVWriter
 			let item = items[i]
 			
 			let bytes = [UInt8](item.utf8)
-			out.write(bytes, maxLength: bytes.count)
+			if bytes.count > 0 {
+				out.write(bytes, maxLength: bytes.count)
+			}
 		}
 		
 		let writtenBytes = out.write(newLine, maxLength: newLine.count)
@@ -58,7 +60,9 @@ public class CSVWriter
 			let item = items[i]
 			
 			let bytes = [UInt8](item.utf8)
-			out.write(bytes, maxLength: bytes.count)
+			if bytes.count > 0 {
+				out.write(bytes, maxLength: bytes.count)
+			}
 		}
 		
 		out.write(newLine, maxLength: newLine.count)

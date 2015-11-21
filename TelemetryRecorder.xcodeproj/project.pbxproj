@@ -11,6 +11,7 @@
 		4413CDD41C01012200B026DA /* LogDirectoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4413CDD31C01012200B026DA /* LogDirectoryManager.swift */; };
 		4413CDD61C010F6400B026DA /* RecordingInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4413CDD51C010F6400B026DA /* RecordingInfoViewController.swift */; };
 		441A4DDC1BFA681800D1F912 /* CSVWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441A4DDB1BFA681800D1F912 /* CSVWriter.swift */; };
+		443AA7791C0122B500C0A8D8 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 443AA7781C0122B500C0A8D8 /* MapKit.framework */; };
 		445857461BF7DF0D0080804A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 445857451BF7DF0D0080804A /* AppDelegate.swift */; };
 		445857481BF7DF0D0080804A /* SetupNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 445857471BF7DF0D0080804A /* SetupNavigationController.swift */; };
 		4458574A1BF7DF0D0080804A /* RecordedTelemetryNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 445857491BF7DF0D0080804A /* RecordedTelemetryNavigationController.swift */; };
@@ -31,6 +32,7 @@
 		4413CDD31C01012200B026DA /* LogDirectoryManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogDirectoryManager.swift; sourceTree = "<group>"; };
 		4413CDD51C010F6400B026DA /* RecordingInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordingInfoViewController.swift; sourceTree = "<group>"; };
 		441A4DDB1BFA681800D1F912 /* CSVWriter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CSVWriter.swift; sourceTree = "<group>"; };
+		443AA7781C0122B500C0A8D8 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		445857421BF7DF0D0080804A /* TelemetryRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TelemetryRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		445857451BF7DF0D0080804A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		445857471BF7DF0D0080804A /* SetupNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupNavigationController.swift; sourceTree = "<group>"; };
@@ -53,6 +55,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				443AA7791C0122B500C0A8D8 /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -62,6 +65,7 @@
 		445857391BF7DF0D0080804A = {
 			isa = PBXGroup;
 			children = (
+				443AA7781C0122B500C0A8D8 /* MapKit.framework */,
 				445857441BF7DF0D0080804A /* TelemetryRecorder */,
 				445857431BF7DF0D0080804A /* Products */,
 			);
@@ -133,6 +137,14 @@
 					445857411BF7DF0D0080804A = {
 						CreatedOnToolsVersion = 7.1;
 						DevelopmentTeam = GV9WK9QPT4;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};

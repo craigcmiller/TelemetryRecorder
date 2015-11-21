@@ -12,13 +12,15 @@ import CoreMotion
 
 public class Recorder : NSObject, CLLocationManagerDelegate
 {
-	private let locationManager = CLLocationManager()
-	private let motionManager = CMMotionManager()
+	private(set) public static var sharedLocationManager : CLLocationManager?
+	public let locationManager = CLLocationManager()
+	//private let motionManager = CMMotionManager()
 	private let altimeter : CMAltimeter?
 	public var valueUpdated : ((Recorder) -> Void)?
 	private(set) public var location : CLLocation?
 	private(set) public var heading : CLHeading?
 	private(set) public var coordinate : Coordinate?
+	private var altDelta = 0.0
 	
 	override init()
 	{
@@ -27,10 +29,16 @@ public class Recorder : NSObject, CLLocationManagerDelegate
 		super.init()
 		
 		locationManager.delegate = self
+		locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+		locationManager.pausesLocationUpdatesAutomatically = false
+		locationManager.activityType = CLActivityType.Other
+		locationManager.distanceFilter = kCLDistanceFilterNone
 		
 		if CLLocationManager.authorizationStatus() == .NotDetermined {
 			locationManager.requestAlwaysAuthorization()
 		}
+		
+		Recorder.sharedLocationManager = locationManager
 	}
 	
 	deinit
@@ -46,12 +54,20 @@ public class Recorder : NSObject, CLLocationManagerDelegate
 	{
 		locationManager.startUpdatingLocation()
 		locationManager.startUpdatingHeading()
+		
+		altimeter?.startRelativeAltitudeUpdatesToQueue(NSOperationQueue.mainQueue(), withHandler: { (altData, error) -> Void in
+			if let rel = altData?.relativeAltitude {
+				self.altDelta += Double(rel)
+			}
+		})
 	}
 	
 	public func stopRecording()
 	{
 		locationManager.stopUpdatingHeading()
 		locationManager.stopUpdatingLocation()
+		
+		altimeter?.stopRelativeAltitudeUpdates()
 	}
 	
 	public func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation])
@@ -68,5 +84,26 @@ public class Recorder : NSObject, CLLocationManagerDelegate
 		heading = newHeading
 		
 		valueUpdated?(self)
+	}
+	
+	/**
+	* Gets the vertical delta since the last call and sets it back to 0
+	*/
+	public var verticalDelta : Double
+	{
+		get {
+			let val = altDelta
+			
+			altDelta = 0.0
+			
+			return val
+		}
+	}
+	
+	public var recordingAltitudeChanges : Bool
+	{
+		get {
+			return altimeter != nil
+		}
 	}
 }

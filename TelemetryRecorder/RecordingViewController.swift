@@ -69,6 +69,12 @@ class RecordingViewController : UIViewController
 			values.append("")
 		}
 		
+		if r.recordingAltitudeChanges {
+			values.append(r.verticalDelta.description)
+		} else {
+			values.append("")
+		}
+		
 		writer.writeLine(values)
 		
 		dataTextView.text = dataStr
@@ -81,13 +87,23 @@ class RecordingViewController : UIViewController
 		recorder.valueUpdated = recorderValueUpdated;
 		
 		recorder.startRecording()
+		
+		UIApplication.sharedApplication().idleTimerDisabled = true
 	}
 	
 	@IBAction func stopRecording(sender: UIButton)
 	{
+		UIApplication.sharedApplication().idleTimerDisabled = false
+		
 		recorder.valueUpdated = nil
+		recorder.stopRecording()
 		
 		callingViewController?.dismissViewControllerAnimated(true, completion: { () -> Void in
 		})
+	}
+	
+	@IBAction func setMinimalBrightness(sender: UIButton)
+	{
+		UIScreen.mainScreen().brightness = 0.1
 	}
 }

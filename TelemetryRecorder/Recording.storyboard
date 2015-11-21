@@ -41,6 +41,14 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cAQ-pN-vkF">
+                                <rect key="frame" x="235" y="484" width="131" height="30"/>
+                                <animations/>
+                                <state key="normal" title="Minimal Brightness"/>
+                                <connections>
+                                    <action selector="setMinimalBrightness:" destination="34g-Dw-BKp" eventType="touchUpInside" id="Ff1-ma-ARx"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -48,9 +56,11 @@
                             <constraint firstItem="XPB-L1-p6e" firstAttribute="top" secondItem="xEk-uN-NsV" secondAttribute="bottom" constant="86" id="1z4-if-uPt"/>
                             <constraint firstAttribute="leadingMargin" secondItem="xEk-uN-NsV" secondAttribute="leading" id="76M-G9-pru"/>
                             <constraint firstItem="a0P-9e-jmO" firstAttribute="top" secondItem="RC3-Jn-voQ" secondAttribute="bottom" id="7hk-Ad-rC7"/>
+                            <constraint firstItem="3iq-Pu-HyB" firstAttribute="top" secondItem="cAQ-pN-vkF" secondAttribute="bottom" constant="8" id="Ndz-1r-gaq"/>
                             <constraint firstItem="XPB-L1-p6e" firstAttribute="top" secondItem="3iq-Pu-HyB" secondAttribute="bottom" constant="48" id="ahY-dQ-aOB"/>
                             <constraint firstItem="xEk-uN-NsV" firstAttribute="top" secondItem="RC3-Jn-voQ" secondAttribute="bottom" constant="50" id="dhN-pG-Ahw"/>
                             <constraint firstItem="3iq-Pu-HyB" firstAttribute="centerX" secondItem="crs-f7-c2r" secondAttribute="centerX" id="oOm-U5-3og"/>
+                            <constraint firstItem="cAQ-pN-vkF" firstAttribute="centerX" secondItem="crs-f7-c2r" secondAttribute="centerX" id="rJl-KL-HOJ"/>
                             <constraint firstItem="a0P-9e-jmO" firstAttribute="centerX" secondItem="crs-f7-c2r" secondAttribute="centerX" id="wnA-tF-LjG"/>
                             <constraint firstAttribute="trailingMargin" secondItem="xEk-uN-NsV" secondAttribute="trailing" id="zSH-Zg-9NI"/>
                         </constraints>
