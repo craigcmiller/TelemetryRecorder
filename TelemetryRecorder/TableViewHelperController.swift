@@ -121,6 +121,18 @@ public class TableViewSection
 		return row
 	}
 	
+	public func addTextFieldRow(title : String, initialText : String, valueChanged : (TableViewRow, NSObject) -> Void) -> TableViewRow
+	{
+		let row = TableViewRow(cellGenerator: tableViewTextBoxCellGenerator)
+		row.title = title
+		row.secondary = initialText
+		row.valueChanged = valueChanged
+		
+		addRow(row)
+		
+		return row
+	}
+	
 	public var rowCount : Int
 	{
 		get { return rows.count }
@@ -141,24 +153,57 @@ public func tableViewDefaultCellGenerator(row : TableViewRow) -> UITableViewCell
 	return cell
 }
 
+public func tableViewTextBoxCellGenerator(row : TableViewRow) -> UITableViewCell
+{
+	let cell = UITableViewCell(style: .Default, reuseIdentifier: row.reuseIdentifier)
+	
+	cell.textLabel?.text = row.title
+	cell.selectionStyle = .None
+	
+	let textField = UITextField()
+	textField.frame = CGRectMake(0, 0, 120, 31)
+	textField.borderStyle = .RoundedRect
+	textField.textAlignment = .Right
+	textField.addTarget(row, action: "callValueChanged:", forControlEvents: .AllEditingEvents)
+	if let initialText = row.secondary {
+		textField.text = initialText
+	}
+	
+	cell.accessoryView = textField
+	
+	return cell
+}
+
 public class TableViewRow
 {
 	public var title : String
 	public var selectedAction : (TableViewRow, NSIndexPath) -> Void
 	public var reuseIdentifier : String
 	public var cellGenerator : (TableViewRow) -> UITableViewCell
+	public var valueChanged : ((TableViewRow, NSObject) -> Void)?
+	public var secondary : String?
 	
-	init()
+	convenience init()
+	{
+		self.init(cellGenerator: tableViewDefaultCellGenerator)
+	}
+	
+	init(cellGenerator cg : (TableViewRow) -> UITableViewCell)
 	{
 		title = ""
 		selectedAction = { (action : TableViewRow, indexPath : NSIndexPath) in }
 		reuseIdentifier = "default";
-		cellGenerator = tableViewDefaultCellGenerator
+		cellGenerator = cg
 	}
 	
-	public func	callSelectedAction(indexPath : NSIndexPath)
+	internal func callSelectedAction(indexPath : NSIndexPath)
 	{
 		selectedAction(self, indexPath)
+	}
+	
+	@objc internal func callValueChanged(sender : NSObject)
+	{
+		valueChanged?(self, sender)
 	}
 	
 	public func generateCell(indexPath : NSIndexPath) -> UITableViewCell
