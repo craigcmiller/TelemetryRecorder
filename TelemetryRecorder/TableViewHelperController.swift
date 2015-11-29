@@ -11,7 +11,7 @@ import UIKit
 
 public class TableViewHelperController : UITableViewController
 {
-	private var sections : [TableViewSection]
+	public var sections : [TableViewSection]
 	
 	public override init(style : UITableViewStyle)
 	{
@@ -55,8 +55,8 @@ public class TableViewHelperController : UITableViewController
 	{
 		let row = rowAtIndexPath(indexPath)
 		
-		let cell = tableView.dequeueReusableCellWithIdentifier(row.reuseIdentifier) ?? row.generateCell(indexPath)
-		
+		//let cell = tableView.dequeueReusableCellWithIdentifier(row.reuseIdentifier) ?? row.generateCell(indexPath)
+		let cell = row.generateCell(indexPath)
 		
 		return cell;
 	}
@@ -86,6 +86,40 @@ public class TableViewHelperController : UITableViewController
 		let row = rowAtIndexPath(indexPath)
 		
 		row.callSelectedAction(indexPath)
+	}
+	
+	public func updateHeaderTitleForSection(section : TableViewSection)
+	{
+		UIView.setAnimationsEnabled(false)
+		tableView.beginUpdates()
+		
+		if let containerView = tableView.headerViewForSection(self.sections.indexOf({ (sec) -> Bool in
+			return sec === section
+		})!) {
+			containerView.textLabel?.text = section.headerTitle
+			
+			containerView.sizeToFit()
+		}
+		
+		tableView.endUpdates()
+		UIView.setAnimationsEnabled(true)
+	}
+	
+	public func updateFooterTitleForSection(section : TableViewSection)
+	{
+		UIView.setAnimationsEnabled(false)
+		tableView.beginUpdates()
+		
+		if let containerView = tableView.footerViewForSection(self.sections.indexOf({ (sec) -> Bool in
+			return sec === section
+		})!) {
+			containerView.textLabel?.text = section.footerTitle
+			
+			containerView.sizeToFit()
+		}
+		
+		tableView.endUpdates()
+		UIView.setAnimationsEnabled(true)
 	}
 }
 
@@ -174,11 +208,30 @@ public func tableViewTextBoxCellGenerator(row : TableViewRow) -> UITableViewCell
 	return cell
 }
 
+public func tableViewSegmentedControlCellGenerator(row : TableViewRow) -> UITableViewCell
+{
+	let cell = UITableViewCell(style: .Default, reuseIdentifier: row.reuseIdentifier)
+	
+	cell.selectionStyle = .None
+	
+	let scRow = row as! SegmentedControlTableViewRow
+	
+	let segmentedControl = UISegmentedControl(items: scRow.labels)
+	segmentedControl.autoresizingMask = [.FlexibleHeight, .FlexibleWidth]
+	segmentedControl.frame = cell.bounds
+	
+	segmentedControl.addTarget(row, action: "callValueChanged:", forControlEvents: .ValueChanged)
+	
+	cell.addSubview(segmentedControl)
+	
+	return cell
+}
+
 public class TableViewRow
 {
 	public var title : String
 	public var selectedAction : (TableViewRow, NSIndexPath) -> Void
-	public var reuseIdentifier : String
+	public var reuseIdentifier : String?
 	public var cellGenerator : (TableViewRow) -> UITableViewCell
 	public var valueChanged : ((TableViewRow, NSObject) -> Void)?
 	public var secondary : String?
@@ -192,7 +245,7 @@ public class TableViewRow
 	{
 		title = ""
 		selectedAction = { (action : TableViewRow, indexPath : NSIndexPath) in }
-		reuseIdentifier = "default";
+		reuseIdentifier = nil
 		cellGenerator = cg
 	}
 	
@@ -209,5 +262,27 @@ public class TableViewRow
 	public func generateCell(indexPath : NSIndexPath) -> UITableViewCell
 	{
 		return cellGenerator(self)
+	}
+}
+
+public class SegmentedControlTableViewRow : TableViewRow
+{
+	public var labels : [String]
+	public var selectedIndex : Int
+	
+	init(labels : [String], initialSelection : Int, cellGenerator cg : (TableViewRow) -> UITableViewCell)
+	{
+		self.labels = labels
+		self.selectedIndex = initialSelection
+		
+		super.init(cellGenerator: cg)
+	}
+	
+	override func callValueChanged(sender: NSObject)
+	{
+		let segmentedControl = sender as! UISegmentedControl
+		selectedIndex = segmentedControl.selectedSegmentIndex
+		
+		super.callValueChanged(sender)
 	}
 }
