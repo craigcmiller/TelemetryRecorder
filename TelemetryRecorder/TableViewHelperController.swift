@@ -96,7 +96,7 @@ public class TableViewHelperController : UITableViewController
 		if let containerView = tableView.headerViewForSection(self.sections.indexOf({ (sec) -> Bool in
 			return sec === section
 		})!) {
-			containerView.textLabel?.text = section.headerTitle
+			containerView.textLabel!.text = section.headerTitle
 			
 			containerView.sizeToFit()
 		}
@@ -113,7 +113,7 @@ public class TableViewHelperController : UITableViewController
 		if let containerView = tableView.footerViewForSection(self.sections.indexOf({ (sec) -> Bool in
 			return sec === section
 		})!) {
-			containerView.textLabel?.text = section.footerTitle
+			containerView.textLabel!.text = section.footerTitle
 			
 			containerView.sizeToFit()
 		}
@@ -183,13 +183,16 @@ public func tableViewDefaultCellGenerator(row : TableViewRow) -> UITableViewCell
 	let cell = UITableViewCell(style: .Default, reuseIdentifier: row.reuseIdentifier)
 	
 	cell.textLabel?.text = row.title
+	if row.iconName != nil {
+		cell.imageView?.image = UIImage(named: row.iconName!)
+	}
 	
 	return cell
 }
 
 public func tableViewTextBoxCellGenerator(row : TableViewRow) -> UITableViewCell
 {
-	let cell = UITableViewCell(style: .Default, reuseIdentifier: row.reuseIdentifier)
+	let cell = tableViewDefaultCellGenerator(row)
 	
 	cell.textLabel?.text = row.title
 	cell.selectionStyle = .None
@@ -210,7 +213,7 @@ public func tableViewTextBoxCellGenerator(row : TableViewRow) -> UITableViewCell
 
 public func tableViewSegmentedControlCellGenerator(row : TableViewRow) -> UITableViewCell
 {
-	let cell = UITableViewCell(style: .Default, reuseIdentifier: row.reuseIdentifier)
+	let cell = tableViewDefaultCellGenerator(row)
 	
 	cell.selectionStyle = .None
 	
@@ -219,6 +222,7 @@ public func tableViewSegmentedControlCellGenerator(row : TableViewRow) -> UITabl
 	let segmentedControl = UISegmentedControl(items: scRow.labels)
 	segmentedControl.autoresizingMask = [.FlexibleHeight, .FlexibleWidth]
 	segmentedControl.frame = cell.bounds
+	segmentedControl.selectedSegmentIndex = scRow.selectedIndex
 	
 	segmentedControl.addTarget(row, action: "callValueChanged:", forControlEvents: .ValueChanged)
 	
@@ -235,6 +239,7 @@ public class TableViewRow
 	public var cellGenerator : (TableViewRow) -> UITableViewCell
 	public var valueChanged : ((TableViewRow, NSObject) -> Void)?
 	public var secondary : String?
+	public var iconName : String?
 	
 	convenience init()
 	{
