@@ -30,7 +30,7 @@ public class CSVWriter
 	
 	public func writeLine(items : [String])
 	{
-		for var i = 0; i < items.count; i++ {
+		for i in 0..<items.count {
 			if i > 0 {
 				out.write(separator, maxLength: separator.count)
 			}
@@ -52,7 +52,7 @@ public class CSVWriter
 	
 	public func writeLine(items : String...)
 	{
-		for var i = 0; i < items.count; i++ {
+		for i in 0..<items.count {
 			if i > 0 {
 				out.write(separator, maxLength: separator.count)
 			}

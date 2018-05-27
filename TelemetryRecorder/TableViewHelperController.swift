@@ -201,7 +201,7 @@ public func tableViewTextBoxCellGenerator(row : TableViewRow) -> UITableViewCell
 	textField.frame = CGRectMake(0, 0, 120, 31)
 	textField.borderStyle = .RoundedRect
 	textField.textAlignment = .Right
-	textField.addTarget(row, action: "callValueChanged:", forControlEvents: .AllEditingEvents)
+	textField.addTarget(row, action: #selector(TableViewRow.callValueChanged(_:)), forControlEvents: .AllEditingEvents)
 	if let initialText = row.secondary {
 		textField.text = initialText
 	}
@@ -224,7 +224,7 @@ public func tableViewSegmentedControlCellGenerator(row : TableViewRow) -> UITabl
 	segmentedControl.frame = cell.bounds
 	segmentedControl.selectedSegmentIndex = scRow.selectedIndex
 	
-	segmentedControl.addTarget(row, action: "callValueChanged:", forControlEvents: .ValueChanged)
+	segmentedControl.addTarget(row, action: #selector(TableViewRow.callValueChanged(_:)), forControlEvents: .ValueChanged)
 	
 	cell.addSubview(segmentedControl)
 	
